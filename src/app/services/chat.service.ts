@@ -18,13 +18,22 @@ export class ChatService {
 
   cargarMensajes() {
 
-    this.itemsCollection = this.afs.collection<Mensaje>('chats');
+    this.itemsCollection = this.afs.collection<Mensaje>('chats', ref => ref.orderBy('fecha', 'desc')
+                                                                            .limit(5) );
 
     return this.itemsCollection.valueChanges()
       .pipe(map( (mensajes: Mensaje[]) => {
         console.log('recibiendo mensajes en el pipeee');
         console.log(mensajes[1]);
-        this.chats = mensajes;
+
+        this.chats = [];
+
+        // Ordenar los mensajes para que se muestren bien en pantalla
+        for (let mensaje of mensajes) {
+          this.chats.unshift( mensaje );
+        }
+
+        // this.chats = mensajes;
         // return mensajes;
       }));
   }

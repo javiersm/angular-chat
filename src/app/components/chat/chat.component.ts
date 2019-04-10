@@ -9,16 +9,24 @@ import { ChatService } from '../../services/chat.service';
 export class ChatComponent implements OnInit {
 
   mensaje = '';
+  elemento: any;
 
   constructor( public chatService: ChatService ) {
     this.chatService.cargarMensajes()
-                      .subscribe( (mensajes: any[]) => {
+                      .subscribe( (mensajes: any) => {
                         console.log('recibiendo mensajes');
                         console.log(mensajes);
+
+                        // Esto es para darle un poco de tiempo y que pueda hacer scroll y no falle
+                        setTimeout(() => {
+                          this.elemento.scrollTop = this.elemento.scrollHeight;
+                        }, 20);
+
                       });
   }
 
   ngOnInit() {
+    this.elemento = document.getElementById('app-mensajes');
   }
 
   enviarMensaje() {
